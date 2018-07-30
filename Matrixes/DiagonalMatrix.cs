@@ -4,7 +4,9 @@
     using System.Collections.Generic;
 
     public class DiagonalMatrix<T> : Matrix<T>
-    {
+    { 
+        private int version;
+
         private readonly T[] mainDiagonalLayout;
 
         public DiagonalMatrix(int size) : base(size)
@@ -16,7 +18,7 @@
         {
             if (i != j)
             {
-                throw new InvalidOperationException("you can change only diagonal elements (where i == j)");
+                throw new InvalidOperationException("you can change only diagonal elements (i == j)");
             }
 
             this.mainDiagonalLayout[i] = value;
@@ -34,16 +36,25 @@
 
         protected override IEnumerator<T> OverridedEnumerator()
         {
+            int currentVersion = version;
             for (int i = 0; i < this.Size; i++)
             {
                 for (int j = 0; j < this.Size; j++)
                 {
                     if (i != j)
                     {
+                        if (this.version != currentVersion)
+                        {
+                            throw new InvalidOperationException();
+                        }
                         yield return default;
                     }
                     else
                     {
+                        if (this.version != currentVersion)
+                        {
+                            throw new InvalidOperationException();
+                        }
                         yield return this.mainDiagonalLayout[i];
                     }
                 }

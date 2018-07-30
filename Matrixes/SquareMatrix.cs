@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Matrixes.EventArgs;
 
 namespace Matrixes
 {
@@ -14,7 +15,7 @@ namespace Matrixes
         {
             this.maxrixLayout = new T[size * size];
         }
-        
+
         protected override void Set(int i, int j, T value)
         {
             this.maxrixLayout[i * this.Size + j] = value;

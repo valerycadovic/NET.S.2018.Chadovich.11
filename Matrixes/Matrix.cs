@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using Matrixes.EventArgs;
 
     public abstract class Matrix<T> : IEnumerable<T>
     {
@@ -11,7 +12,9 @@
             ValidateDimensionOnPositiveValue(size, nameof(size));
             this.Size = size;
         }
-        
+
+        public event EventHandler<MatrixEventArgs> ElementChanged = delegate { };
+
         public int Size { get; }
 
         public T this[int i, int j]
@@ -25,7 +28,14 @@
             {
                 ValidateIndexesOnBounds(i, j);
                 Set(i, j, value);
+                OnElementChanged(i, j);
             }
+        }
+
+        private void OnElementChanged(int i, int j)
+        {
+            MatrixEventArgs e = new MatrixEventArgs(i, j);
+            this.ElementChanged?.Invoke(this, e);
         }
 
         public IEnumerator<T> GetEnumerator()
